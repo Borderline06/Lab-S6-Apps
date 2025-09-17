@@ -4,8 +4,8 @@ import { View, Text, Button } from "react-native";
 const CounterClock = () => {
   const [counter, setCounter] = useState(0);
   const [time, setTime] = useState(new Date().toLocaleTimeString());
+  const [metaAlcanzada, setMetaAlcanzada] = useState(false);
 
-  //Bienvenida
   useEffect(() => {
     console.log("Bienvenido");
 
@@ -21,9 +21,20 @@ const CounterClock = () => {
     };
   }, []);
 
-  // Función para incrementar el contador
+  useEffect(() => {
+    // Resetear contador al llegar a 10
+    if (counter === 10) {
+      setCounter(0);
+    }
+
+    // Mostrar mensaje al llegar a 5
+    if (counter === 5 && !metaAlcanzada) {
+      setMetaAlcanzada(true);
+    }
+  }, [counter]);
+
   const incrementCounter = () => {
-    setCounter((prevCounter) => (prevCounter === 9 ? 0 : prevCounter + 1));
+    setCounter((prevCounter) => prevCounter + 1);
   };
 
   return (
@@ -32,6 +43,11 @@ const CounterClock = () => {
       <Text style={{ fontSize: 30, marginBottom: 10 }}>
         Contador: {counter}
       </Text>
+      {metaAlcanzada && (
+        <Text style={{ color: "green", fontSize: 24, marginBottom: 20 }}>
+          ¡Meta Alcanzada!
+        </Text>
+      )}
       <Button title="Aumentar Contador" onPress={incrementCounter} />
       <Text style={{ marginTop: 20, fontSize: 20 }}>Hora: {time}</Text>
     </View>
